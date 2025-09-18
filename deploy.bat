@@ -20,7 +20,7 @@ set SITE_NAME=frontend
 
 :: --- SCRIPT ---
 echo [1/4] Copying app files to the container...
-docker cp "%LOCAL_APP_PATH%" %CONTAINER_NAME%:/home/frappe/frappe-bench/apps/
+docker cp "%LOCAL_APP_PATH%\." %CONTAINER_NAME%:/home/frappe/frappe-bench/apps/%APP_NAME%/
 
 :: Check if the copy was successful
 if %errorlevel% neq 0 (
@@ -30,7 +30,7 @@ if %errorlevel% neq 0 (
 )
 
 echo [2/4] Changing file ownership inside the container...
-docker exec %CONTAINER_NAME% chown -R frappe:frappe /home/frappe/frappe-bench/apps/%APP_NAME%
+docker exec -u root %CONTAINER_NAME% chown -R frappe:frappe /home/frappe/frappe-bench/apps/%APP_NAME%
 
 echo [3/4] Clearing cache...
 docker exec %CONTAINER_NAME% bench --site %SITE_NAME% clear-cache
